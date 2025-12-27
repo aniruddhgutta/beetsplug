@@ -78,11 +78,11 @@ class TagCopy(BeetsPlugin):
 
   def process_item(self, item):
     for copy_to, copy_from in self.get_copy_tag_defs():
+      value = item[copy_from]
+      if isinstance(value, list):
+        value = '; '.join(value)
 
-      if self.is_only_empty_tags_enabled:
-        if not item[copy_to]:
-          item[copy_to] = item[copy_from]
-      else:
-        item[copy_to] = item[copy_from]
+      if not self.is_only_empty_tags_enabled or not item[copy_to]:
+        item[copy_to] = value
 
-      return item
+    return item
